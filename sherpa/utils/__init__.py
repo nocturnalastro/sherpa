@@ -99,8 +99,7 @@ __all__ = ('NoNewAttributesAfterInit', 'SherpaTest', 'SherpaTestCase',
            'pad_bounding_box', 'parallel_map', 'param_apply_limits',
            'parse_expr', 'poisson_noise', 'print_fields', 'rebin',
            'sao_arange', 'sao_fcmp', 'set_origin', 'sum_intervals', 'zeroin',
-           'multinormal_pdf', 'multit_pdf', 'get_error_estimates', 'quantile',
-           'get_valid_args')
+           'multinormal_pdf', 'multit_pdf', 'get_error_estimates', 'quantile')
 
 _guess_ampl_scale = 1.e+3
 
@@ -2815,12 +2814,3 @@ def zeroin(fcn, xa, xb, fa=None, fb=None, args=(), maxfev=32, tol=1.0e-2):
 
     except (ZeroDivisionError, OutOfBoundErr):
         return [[xb, fb], [[xa, fa], [xc, fc]], nfev[0]]
-
-
-def get_valid_args(func):
-    valid_args = func.func_code.co_varnames[:func.func_code.co_argcount]
-    # number of keyword arguments
-    kwargs_length = len(func.func_defaults) if func.func_defaults else 0
-    # because kwargs are last
-    valid_kwargs = valid_args[-kwargs_length:] if kwargs_length else []
-    return valid_kwargs

@@ -1,5 +1,5 @@
 #
-#  Copyright (C) 2009, 2015  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2009, 2015, 2016  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -45,6 +45,13 @@ if (bool(truncation_flag) is False or truncation_flag == "FALSE" or
     truncation_value = 1.0e-25
 
 
+def get_syserror_weight_extra(dictionary):
+    syserror = dictionary.get('syserror')
+    weight = dictionary.get('weight')
+    extra = dictionary.get('extra_args')
+    return syserror, weight, extra
+
+
 class Stat(NoNewAttributesAfterInit):
 
     def __init__(self, name):
@@ -60,8 +67,7 @@ class Stat(NoNewAttributesAfterInit):
     def calc_staterror(self, data):
         raise NotImplementedError
 
-    def calc_stat(self, data, model, staterror=None, syserror=None,
-                  weight=None, bkg=None):
+    def calc_stat(self, data, model, staterror, *args, **kwargs):
         raise NotImplementedError
 
 
@@ -153,8 +159,8 @@ class Cash(Likelihood):
         Likelihood.__init__(self, name)
 
     @staticmethod
-    def calc_stat(data, model, staterror=None, syserror=None, weight=None,
-                  bkg=None):
+    def calc_stat(data, model, staterror, *args, **kwargs):
+        syserror, weight, extra = get_syserror_weight_extra(kwargs)
         return _statfcts.calc_cash_stat(data, model, staterror, syserror,
                                         weight, truncation_value)
 
@@ -229,8 +235,8 @@ class CStat(Likelihood):
         Likelihood.__init__(self, name)
 
     @staticmethod
-    def calc_stat(data, model, staterror=None, syserror=None, weight=None,
-                  bkg=None):
+    def calc_stat(data, model, staterror, *args, **kwargs):
+        syserror, weight, extra = get_syserror_weight_extra(kwargs)
         return _statfcts.calc_cstat_stat(data, model, staterror, syserror,
                                          weight, truncation_value)
 
@@ -289,8 +295,8 @@ class Chi2(Stat):
         raise StatErr('chi2noerr')
 
     @staticmethod
-    def calc_stat(data, model, staterror, syserror=None, weight=None,
-                  bkg=None):
+    def calc_stat(data, model, staterror, *args, **kwargs):
+        syserror, weight, extra = get_syserror_weight_extra(kwargs)
         return _statfcts.calc_chi2_stat(data, model, staterror,
                                         syserror, weight, truncation_value)
 
@@ -311,8 +317,8 @@ class LeastSq(Chi2):
         return numpy.ones_like(data)
 
     @staticmethod
-    def calc_stat(data, model, staterror, syserror=None, weight=None,
-                  bkg=None):
+    def calc_stat(data, model, staterror, *args, **kwargs):
+        syserror, weight, extra = get_syserror_weight_extra(kwargs)
         return _statfcts.calc_lsq_stat(data, model, staterror,
                                        syserror, weight, truncation_value)
 
@@ -436,8 +442,8 @@ class Chi2ModVar(Chi2):
         return numpy.zeros_like(data)
 
     @staticmethod
-    def calc_stat(data, model, staterror, syserror=None, weight=None,
-                  bkg=None):
+    def calc_stat(data, model, staterror, *args, **kwargs):
+        syserror, weight, extra = get_syserror_weight_extra(kwargs)
         return _statfcts.calc_chi2modvar_stat(data, model, staterror,
                                               syserror, weight,
                                               truncation_value)
@@ -510,28 +516,27 @@ class UserStat(Stat):
             raise StatErr('nostat', self.name, 'calc_staterror()')
         return self.errfunc(data)
 
-    def calc_stat(self, data, model, staterror=None, syserror=None,
-                  weight=None, bkg=None):
+    def calc_stat(self, data, model, staterror, *args, **kwargs):
         if not self._statfuncset:
             raise StatErr('nostat', self.name, 'calc_stat()')
 
-        if bkg is None or bkg['bkg'] is None:
-            return self.statfunc(data, model, staterror, syserror, weight)
-        else:
-            return self.statfunc(data, model, staterror, syserror, weight,
-                                 bkg['bkg'])
+        # if bkg is None or bkg['bkg'] is None:
+        #     return self.statfunc(data, model, staterror, syserror, weight)
+        # else:
+        #     return self.statfunc(data, model, staterror, syserror, weight,
+        #                          bkg['bkg'])
 
 
 class WStat(Likelihood):
     """Maximum likelihood function including background (XSPEC style).
-    
+
     This is equivalent to the XSpec implementation of the
     W statistic for CStat [1]_, and includes the background data in
     the fit statistic. If a model is being fit to the background then
     the CStat statistic should be used.
 
     The following description is taken from [1]_.
-    
+
     Suppose that each bin in the background spectrum is given its own
     parameter so that the background model is b_i = f_i. A standard fit
     for all these parameters would be impractical; however there is an
@@ -539,7 +544,7 @@ class WStat(Likelihood):
     variables which can be derived by using the fact that the derivative
     of the likelihood (L) will be zero at the best fit. Solving for the
     f_i and substituting gives the profile likelihood::
-    
+
       W = 2 sum_(i=1)^N t_s m_i + (t_s + t_b) f_i -
           S_i ln(t_s m_i + t_s f_i) - B_i ln(t_b f_i) -
           S_i (1- ln(S_i)) - B_i (1 - ln(B_i))
@@ -549,7 +554,7 @@ class WStat(Likelihood):
       f_i = (S_i + B_i - (t_s + t_b) m_i + d_i) / (2 (t_s + t_b))
       d_i = sqrt([(t_s + t_b) m_i - S_i - B_i]^2 +
                  4(t_s + t_b) B_i m_i)
-                 
+
     If any bin has S_i and/or B_i zero then its contribution to W (W_i)
     is calculated as a special case. So, if S_i is zero then::
 
@@ -588,14 +593,14 @@ class WStat(Likelihood):
         Likelihood.__init__(self, name)
 
     @staticmethod
-    def calc_stat(data, model, staterror=None, syserror=None,
-                  weight=None, bkg=None):
-        if bkg is None or bkg['bkg'] is None:
+    def calc_stat(data, model, staterror, *args, **kwargs):
+        syserror, weight, extra = get_syserror_weight_extra(kwargs)
+        if extra is None or extra['bkg'] is None:
             raise StatErr('usecstat')
 
         return _statfcts.calc_wstat_stat(data, model,
-                                         bkg['data_size'],
-                                         bkg['exposure_time'],
-                                         bkg['bkg'],
-                                         bkg['backscale_ratio'],
+                                         extra['data_size'],
+                                         extra['exposure_time'],
+                                         extra['bkg'],
+                                         extra['backscale_ratio'],
                                          truncation_value)
