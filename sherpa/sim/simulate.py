@@ -1,5 +1,5 @@
-# 
-#  Copyright (C) 2010  Smithsonian Astrophysical Observatory
+#
+#  Copyright (C) 2010, 2016  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -86,7 +86,7 @@ class LikelihoodRatioResults(NoNewAttributesAfterInit):
         return '<Likelihood ratio results instance>'
 
 
-    def __str__(self):      
+    def __str__(self):
         samples = self.samples
         if self.samples is not None:
             samples = numpy.array2string(self.samples, separator=',', precision=4, suppress_small=False)
@@ -133,7 +133,7 @@ class LikelihoodRatioResults(NoNewAttributesAfterInit):
 class LikelihoodRatioTest(NoNewAttributesAfterInit):
     """Likelihood Ratio Test.
 
-    The likelihood ratio [1]_, D, is defined as::
+    The likelihood ratio [LRT]_, D, is defined as::
 
                   (   likelihood for null model	)
         D = -2 ln -----------------------------------
@@ -151,7 +151,7 @@ class LikelihoodRatioTest(NoNewAttributesAfterInit):
     References
     ----------
 
-    .. [1] http://en.wikipedia.org/wiki/Likelihood-ratio_test
+    .. [LRT] http://en.wikipedia.org/wiki/Likelihood-ratio_test
 
     """
 
@@ -164,7 +164,7 @@ class LikelihoodRatioTest(NoNewAttributesAfterInit):
         # Fake using poisson_noise with null
         fake = poisson_noise(nullfit.data.eval_model(nullfit.model))
 
-                # Set faked data for both nullfit and altfit 
+                # Set faked data for both nullfit and altfit
         nullfit.data.set_dep(fake)
 
         # Start the faked fit at initial null best-fit values
@@ -188,7 +188,7 @@ class LikelihoodRatioTest(NoNewAttributesAfterInit):
         debug("alt model")
         debug(str(altfit.model))
 
-        # Set alt model and fit   
+        # Set alt model and fit
         altfr = altfit.fit()
         debug(altfr.format())
 
