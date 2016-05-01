@@ -1,5 +1,5 @@
 #
-#  Copyright (C) 2009, 2015  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2009, 2015, 2016  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -89,19 +89,19 @@ class Cash(Likelihood):
     Counts are sampled from the Poisson distribution, and so the best
     way to assess the quality of model fits is to use the product of
     individual Poisson probabilities computed in each bin i, or the
-    likelihood L:
+    likelihood L::
 
-    L = (product)_i [ M(i)^D(i)/D(i)! ] * exp[-M(i)]
+      L = (product)_i [ M(i)^D(i)/D(i)! ] * exp[-M(i)]
 
     where M(i) = S(i) + B(i) is the sum of source and background model
     amplitudes, and D(i) is the number of observed counts, in bin i.
 
-    The Cash statistic [1]_ is derived by (1) taking the logarithm of
+    The Cash statistic [Cash]_ is derived by (1) taking the logarithm of
     the likelihood function, (2) changing its sign, (3) dropping the
     factorial term (which remains constant during fits to the same
-    dataset), and (4) multiplying by two:
+    dataset), and (4) multiplying by two::
 
-    C = 2 * (sum)_i [ M(i) - D(i) log M(i) ]
+      C = 2 * (sum)_i [ M(i) - D(i) log M(i) ]
 
     The factor of two exists so that the change in cash statistic from
     one model fit to the next, (Delta)C, is distributed approximately
@@ -143,7 +143,7 @@ class Cash(Likelihood):
     References
     ----------
 
-    .. [1] "Parameter estimation in astronomy through application of
+    .. [Cash] "Parameter estimation in astronomy through application of
            the likelihood ratio", Cash, W. 1979, ApJ 228, 939
            http://adsabs.harvard.edu/abs/1979ApJ...228..939C
 
@@ -163,16 +163,16 @@ class CStat(Likelihood):
     """Maximum likelihood function (XSPEC style).
 
     This is equivalent to the XSpec implementation of the
-    Cash statistic [1]_ except that it requires a model to be fit
+    Cash statistic [CashInXSPEC]_ except that it requires a model to be fit
     to the background. To handle the background in the same manner
     as XSpec, use the WStat statistic.
 
     Counts are sampled from the Poisson distribution, and so the best
     way to assess the quality of model fits is to use the product of
     individual Poisson probabilities computed in each bin i, or the
-    likelihood L:
+    likelihood L::
 
-    L = (product)_i [ M(i)^D(i)/D(i)! ] * exp[-M(i)]
+      L = (product)_i [ M(i)^D(i)/D(i)! ] * exp[-M(i)]
 
     where M(i) = S(i) + B(i) is the sum of source and background model
     amplitudes, and D(i) is the number of observed counts, in bin i.
@@ -181,9 +181,9 @@ class CStat(Likelihood):
     likelihood function, (2) changing its sign, (3) dropping the
     factorial term (which remains constant during fits to the same
     dataset), (4) adding an extra data-dependent term (this is what
-    makes it different to `Cash`, and (5) multiplying by two:
+    makes it different to `Cash`, and (5) multiplying by two::
 
-    C = 2 * (sum)_i [ M(i) - D(i) + D(i)*[log D(i) - log M(i)] ]
+      C = 2 * (sum)_i [ M(i) - D(i) + D(i)*[log D(i) - log M(i)] ]
 
     The factor of two exists so that the change in the cstat statistic
     from one model fit to the next, (Delta)C, is distributed
@@ -220,7 +220,7 @@ class CStat(Likelihood):
     References
     ----------
 
-    .. [1] The description of the Cash statistic (`cstat`) in
+    .. [CashInXSPEC] The description of the Cash statistic (`cstat`) in
            https://heasarc.gsfc.nasa.gov/xanadu/xspec/manual/XSappendixStatistics.html
 
     """
@@ -238,9 +238,9 @@ class CStat(Likelihood):
 class Chi2(Stat):
     """Chi Squared statistic.
 
-    The chi-square statistic is:
+    The chi-square statistic is::
 
-    chi^2 = (sum)_i [ [ N(i,S) - B(i,x,pB) - S(i,x,pS) ]^2 / sigma(i)^2 ]
+      chi^2 = (sum)_i [ [ N(i,S) - B(i,x,pB) - S(i,x,pS) ]^2 / sigma(i)^2 ]
 
     where N(i,S) is the total number of observed counts in bin i of
     the on-source region; B(i,x,pB) is the number of predicted
@@ -259,8 +259,8 @@ class Chi2(Stat):
     the length of a background time segment, or a product of the two,
     etc.; and A(S) is the on-source "area". These terms may be defined
     for a particular type of data: for example, PHA data sets A(B) to
-    `BACKSCAL * EXPOSURE` from the background data set and A(S) to
-    `BACKSCAL * EXPOSURE` from the source data set.
+    ``BACKSCAL * EXPOSURE`` from the background data set and A(S) to
+    ``BACKSCAL * EXPOSURE`` from the source data set.
 
     There are different ways of defining the sigma(i) terms,
     supported by the sub-classes.
@@ -325,19 +325,19 @@ class Chi2Gehrels(Chi2):
     used. This makes it more-suitable for use with low-count data.
 
     The standard deviation for each bin is calculated using the
-    approximation from [1]_:
+    approximation from [Gehrels]_::
 
-    sigma(i,S) = 1 + sqrt(N(i,s) + 0.75)
+      sigma(i,S) = 1 + sqrt(N(i,s) + 0.75)
 
     where the higher-order terms have been dropped. This is accurate
     to approximately one percent. For data where the background has
-    not been subtracted then the error term is:
+    not been subtracted then the error term is::
 
-    sigma(i) = sigma(i,S)
+      sigma(i) = sigma(i,S)
 
-    whereas with background subtraction,
+    whereas with background subtraction::
 
-    sigma(i)^2 = sigma(i,S)^2 + [A(S)/A(B)]^2 sigma(i,B)^2
+      sigma(i)^2 = sigma(i,S)^2 + [A(S)/A(B)]^2 sigma(i,B)^2
 
     Notes
     -----
@@ -349,7 +349,7 @@ class Chi2Gehrels(Chi2):
     References
     ----------
 
-    .. [1] "Confidence limits for small numbers of events in
+    .. [Gehrels] "Confidence limits for small numbers of events in
            astrophysical data", Gehrels, N. 1986, ApJ, vol 303,
            p. 336-346.
            http://adsabs.harvard.edu/abs/1986ApJ...303..336G
@@ -366,9 +366,9 @@ class Chi2ConstVar(Chi2):
     """Chi Squared with constant variance.
 
     The variance is the same in each bin, and set to be the mean
-    number of counts in the data:
+    number of counts in the data::
 
-    sigma(i)^2 = (1/N) * (sum)_(j=1)^N N(j,S) + [A(S)/A(B)]^2 N(j,B)
+      sigma(i)^2 = (1/N) * (sum)_(j=1)^N N(j,S) + [A(S)/A(B)]^2 N(j,B)
 
     where N is the number of on-source (and off-source) bins included
     in the fit. The background term appears only if an estimate of the
@@ -391,9 +391,9 @@ class Chi2DataVar(Chi2):
     If the number of counts in each bin is large, then the shape of
     the Poisson distribution from which the counts are sampled tends
     asymptotically towards that of a Gaussian distribution, with
-    variance
+    variance::
 
-    sigma(i)^2 = N(i,S) + [A(S)/A(B)]^2 N(i,B)
+      sigma(i)^2 = N(i,S) + [A(S)/A(B)]^2 N(i,B)
 
     where N is the number of on-source (and off-source) bins included
     in the fit. The background term appears only if an estimate of the
@@ -524,14 +524,14 @@ class UserStat(Stat):
 
 class WStat(Likelihood):
     """Maximum likelihood function including background (XSPEC style).
-    
+
     This is equivalent to the XSpec implementation of the
-    W statistic for CStat [1]_, and includes the background data in
+    W statistic for CStat [WstatInXSPEC]_, and includes the background data in
     the fit statistic. If a model is being fit to the background then
     the CStat statistic should be used.
 
-    The following description is taken from [1]_.
-    
+    The following description is taken from [WstatInXSPEC]_.
+
     Suppose that each bin in the background spectrum is given its own
     parameter so that the background model is b_i = f_i. A standard fit
     for all these parameters would be impractical; however there is an
@@ -539,7 +539,7 @@ class WStat(Likelihood):
     variables which can be derived by using the fact that the derivative
     of the likelihood (L) will be zero at the best fit. Solving for the
     f_i and substituting gives the profile likelihood::
-    
+
       W = 2 sum_(i=1)^N t_s m_i + (t_s + t_b) f_i -
           S_i ln(t_s m_i + t_s f_i) - B_i ln(t_b f_i) -
           S_i (1- ln(S_i)) - B_i (1 - ln(B_i))
@@ -549,7 +549,7 @@ class WStat(Likelihood):
       f_i = (S_i + B_i - (t_s + t_b) m_i + d_i) / (2 (t_s + t_b))
       d_i = sqrt([(t_s + t_b) m_i - S_i - B_i]^2 +
                  4(t_s + t_b) B_i m_i)
-                 
+
     If any bin has S_i and/or B_i zero then its contribution to W (W_i)
     is calculated as a special case. So, if S_i is zero then::
 
@@ -579,7 +579,7 @@ class WStat(Likelihood):
     References
     ----------
 
-    .. [1] The description of the W statistic (`wstat`) in
+    .. [WstatInXSPEC] The description of the W statistic (`wstat`) in
            https://heasarc.gsfc.nasa.gov/xanadu/xspec/manual/XSappendixStatistics.html
 
     """
