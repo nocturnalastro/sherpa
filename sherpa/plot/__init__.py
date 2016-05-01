@@ -1,5 +1,5 @@
 #
-#  Copyright (C) 2009, 2015  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2009, 2015, 2016  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 #
 
 """
-A visualization interface to Sherpa
+A visualization interface to Sherpa.
 """
 
 from __future__ import division
@@ -895,7 +895,7 @@ class ComponentTemplateModelPlot(ComponentModelPlot):
 
 
 class SourcePlot(ModelPlot):
-    """Create 1D plots of unconcolved model values.
+    """Create 1D plots of unconvolved model values.
 
     Attributes
     ----------
