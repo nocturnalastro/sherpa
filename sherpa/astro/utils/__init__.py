@@ -207,9 +207,9 @@ def calc_energy_flux( data, src, lo=None, hi=None):
 
     Parameters
     ----------
-    data :
+    data
        The data object to use.
-    src :
+    src
        The source expression: this should not include any instrument
        responses.
     lo : number, optional
@@ -222,7 +222,7 @@ def calc_energy_flux( data, src, lo=None, hi=None):
 
     Returns
     -------
-    flux :
+    flux
        The flux from the source model integrated over the given
        band. For X-Spec style models the units will be erg/cm^2/s. If
        `hi` is `None` but `lo` is set then the flux density is
@@ -233,7 +233,7 @@ def calc_energy_flux( data, src, lo=None, hi=None):
     --------
     calc_data_sum : Sum up the data values over a pass band.
     calc_model_sum : Sum up the fitted model over a pass band.
-    calc_source_sum: Sum up the source model over a pass band.
+    calc_source_sum : Sum up the source model over a pass band.
     calc_photon_flux : Integrate the source model over a pass band.
 
     Notes
@@ -280,9 +280,9 @@ def calc_photon_flux( data, src, lo=None, hi=None):
 
     Parameters
     ----------
-    data :
+    data
        The data object to use.
-    src :
+    src
        The source expression: this should not include any instrument
        responses.
     lo : number, optional
@@ -295,7 +295,7 @@ def calc_photon_flux( data, src, lo=None, hi=None):
 
     Returns
     -------
-    flux :
+    flux
        The flux from the source model integrated over the given
        band. For X-Spec style models the units will be
        photon/cm^2/s. If `hi` is `None` but `lo` is set then the flux
@@ -307,7 +307,7 @@ def calc_photon_flux( data, src, lo=None, hi=None):
     calc_data_sum : Sum up the data values over a pass band.
     calc_model_sum : Sum up the fitted model over a pass band.
     calc_energy_flux : Integrate the source model over a pass band.
-    calc_source_sum: Sum up the source model over a pass band.
+    calc_source_sum : Sum up the source model over a pass band.
 
     Notes
     -----
@@ -358,9 +358,9 @@ def calc_source_sum( data, src, lo=None, hi=None):
 
     Parameters
     ----------
-    data :
+    data
        The data object to use.
-    src :
+    src
        The source expression.
     lo : number, optional
        The minimum limit of the band. Use `None`, the default, to use
@@ -416,7 +416,7 @@ def calc_data_sum(data, lo=None, hi=None):
 
     Parameters
     ----------
-    data :
+    data
        The data object to use.
     lo : number, optional
        The minimum limit of the band. Use `None`, the default, to use
@@ -441,7 +441,7 @@ def calc_data_sum(data, lo=None, hi=None):
     calc_model_sum : Sum up the fitted model over a pass band.
     calc_energy_flux : Integrate the source model over a pass band.
     calc_photon_flux : Integrate the source model over a pass band.
-    calc_source_sum: Sum up the source model over a pass band.
+    calc_source_sum : Sum up the source model over a pass band.
     set_model : Set the source model expression for a data set.
 
     Notes
@@ -517,9 +517,9 @@ def calc_model_sum(data, model, lo=None, hi=None):
 
     Parameters
     ----------
-    data :
+    data
        The data object to use.
-    src :
+    src
        The source expression, which should not include the
        instrumental responses.
     lo : number, optional
@@ -540,7 +540,7 @@ def calc_model_sum(data, model, lo=None, hi=None):
     calc_data_sum : Sum up the observed counts over a pass band.
     calc_energy_flux : Integrate the source model over a pass band.
     calc_photon_flux : Integrate the source model over a pass band.
-    calc_source_sum: Sum up the source model over a pass band.
+    calc_source_sum : Sum up the source model over a pass band.
 
     Notes
     -----
@@ -568,7 +568,7 @@ def calc_model_sum2d(data, model, reg=None):
     ----------
     data : sherpa.astro.data.DataIMG instance
        The data object to use.
-    model :
+    model
        The source expression, which should not include the PSF model.
     reg : str, optional
        The spatial filter to use. The default, `None`, is to use the
@@ -647,9 +647,9 @@ def calc_kcorr(data, model, z, obslo, obshi, restlo=None, resthi=None):
 
     Parameters
     ----------
-    data :
+    data
        The data object to use.
-    model :
+    model
        The source expression: this should not include any instrument
        responses.
     z : number or array, >= 0
