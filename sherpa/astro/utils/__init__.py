@@ -29,9 +29,11 @@ from sherpa.utils.err import IOErr, DataErr
 __all__ = ['arf_fold', 'rmf_fold', 'do_group', 'apply_pileup',
            'eqwidth', 'calc_photon_flux', 'calc_energy_flux',
            'calc_data_sum', 'calc_model_sum', 'shrink_effarea',
-           'calc_data_sum2d','calc_model_sum2d', 'filter_resp',
+           'calc_data_sum2d', 'calc_model_sum2d', 'filter_resp',
            'calc_source_sum', 'compile_energy_grid',
-           'expand_grouped_mask','resp_init', 'is_in', 'get_xspec_position']
+           'calc_kcorr',
+           'expand_grouped_mask', 'resp_init', 'is_in',
+           'get_xspec_position']
 
 
 warning = logging.getLogger(__name__).warning
@@ -45,6 +47,8 @@ try:
 except ImportError:
     warning('failed to import sherpa.astro.utils._region; Region routines ' +
             'will not be available')
+
+__all__ = tuple(__all__)
 
 _hc = 12.39841874  # nist.gov in [keV-Angstrom]
 
