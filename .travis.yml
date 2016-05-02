@@ -45,6 +45,9 @@ matrix:
       python: "2.7"
     - env: FITS="astropy" INSTALL_TYPE=install TEST=package MATPLOTLIBVER=1.5 NUMPYVER=1.10
       python: "2.7"
+    # experimental support for using Sphinx to build the documentation
+    - env: FITS="astropy" INSTALL_TYPE=build_sphinx TEST=none MATPLOTLIBVER=1.5 NUMPYVER=1.10
+      python: "2.7"
 
 env:  FITS="astropy" INSTALL_TYPE=install TEST=smoke MATPLOTLIBVER=1.5
 
@@ -92,7 +95,9 @@ before_install:
      then git submodule deinit -f .;
     fi
   - if [ -n "${NOSETUPTOOLS}" ]; then conda remove --yes setuptools; fi
-
+  - if [ ${INSTALL_TYPE} == build_sphinx ];
+     then conda install 'ipython<4.1' sphinx numpydoc;
+    fi
 
 install:
   - python setup.py $INSTALL_TYPE
