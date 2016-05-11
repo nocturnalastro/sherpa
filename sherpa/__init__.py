@@ -102,6 +102,13 @@ def get_config():
     return os.path.join(os.path.dirname(__file__), filename)
 
 
+def smoke_ciao(verbosity=5, fits="pychips", xspec=True, require_failure=False):
+    """
+    Convenience method for calling the smoke test with defaults that make sense for CIAO
+    """
+    smoke(verbosity=verbosity, fits=fits, xspec=xspec, require_failure=require_failure)
+
+
 def smoke(verbosity=0, require_failure=False, fits=None, xspec=False):
     """
     Run Sherpa's "smoke" test. The smoke test is a simple test that
